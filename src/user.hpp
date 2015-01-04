@@ -1,8 +1,6 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#pragma once
-
 struct User {
 
     int x;

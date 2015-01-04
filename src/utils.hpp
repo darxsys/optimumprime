@@ -1,8 +1,6 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#pragma once
-
 #include <stdlib.h>
 #include <vector>
 #include <math.h>

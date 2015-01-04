@@ -1,8 +1,6 @@
 #ifndef STORAGE_HPP
 #define STORAGE_HPP
 
-#pragma once
-
 struct Storage {
 
     int x;

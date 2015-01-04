@@ -1,4 +1,3 @@
-#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,37 +11,12 @@
         }\
     } while (0)
 
-static struct option options[] = {
-    {"input", required_argument, 0, 'i'},
-    {"help", no_argument, 0, 'h'},
-    {0, 0, 0, 0}
-};
-
-static void help();
 
 int main(int argc, char* argv[]) {
 
-    char* inputPath = NULL;
+    ASSERT(argc == 2, "missing input file");
 
-    while (1) {
-
-        char argument = getopt_long(argc, argv, "i:h", options, NULL);
-
-        if (argument == -1) {
-            break;
-        }
-
-        switch (argument) {
-        case 'i':
-            inputPath = optarg;
-            break;
-        default:
-            help();
-            return -1;
-        }
-    }
-
-    ASSERT(inputPath != NULL, "missing option -i (input file)");
+    char* inputPath = argv[1];
 
     TaskData* taskData;
     taskDataCreate(&taskData, inputPath);
@@ -52,16 +26,4 @@ int main(int argc, char* argv[]) {
     taskDataDelete(taskData);
 
     return 0;
-}
-
-static void help() {
-    printf(
-    "usage: optimumprime -i <input file> [arguments ...]\n"
-    "\n"
-    "arguments:\n"
-    "    -i, --input <file>\n"
-    "        (required)\n"
-    "        input file\n"
-    "    -h, -help\n"
-    "        prints out the help\n");
 }
