@@ -72,17 +72,13 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
     users.reserve(userLen);
 
     for (int i = 0; i < storageLen; ++i) {
-        Storage storage(storageCoordinates[i].first, storageCoordinates[i].second,
-            storageCapacity[i], storageCost[i]); 
-
-        storages.push_back(storage);
+        storages.emplace_back(storageCoordinates[i].first, storageCoordinates[i].second,
+            storageCapacity[i], storageCost[i]);
     }
 
     for (int i = 0; i < userLen; ++i) {
-        User user(userCoordinates[i].first, userCoordinates[i].second,
-            userDemand[i]); 
-
-        users.push_back(user);
+        users.emplace_back(userCoordinates[i].first, userCoordinates[i].second,
+            userDemand[i]);
     }
 
     *taskData = new TaskData(storageLen, storages, userLen, users,
