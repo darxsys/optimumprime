@@ -1,32 +1,28 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#pragma once
+
 #include <stdlib.h>
 #include <vector>
+#include <math.h>
 
-#pragma once
+#include "user.hpp"
+#include "storage.hpp"
 
 struct TaskData {
 
     int storageLen;
-    std::vector<std::pair<int, int> > storageCoordinates;
-    std::vector<int> storageCapacity;
-    std::vector<int> storageCost;
+    std::vector<Storage> storages;
     int userLen;
-    std::vector<std::pair<int, int> > userCoordinates;
-    std::vector<int> userDemand;
+    std::vector<User> users;
     int vehicleCapacity;
     int vehicleCost;
 
-    TaskData(int storageLen_, std::vector<std::pair<int, int> > storageCoordinates_,
-            std::vector<int> storageCapacity_, std::vector<int> storageCost_,
-            int userLen_, std::vector<std::pair<int, int> > userCoordinates_,
-            std::vector<int> userDemand_, int vehicleCapacity_,
-            int vehicleCost_) :
-        storageLen(storageLen_), storageCoordinates(storageCoordinates_),
-        storageCapacity(storageCapacity_), storageCost(storageCost_),
-        userLen(userLen_), userCoordinates(userCoordinates_),
-        userDemand(userDemand_), vehicleCapacity(vehicleCapacity_),
+    TaskData(int storageLen_, std::vector<Storage> storages_, int userLen_,
+            std::vector<User> users_, int vehicleCapacity_, int vehicleCost_) :
+        storageLen(storageLen_), storages(storages_), userLen(userLen_),
+        users(users_), vehicleCapacity(vehicleCapacity_),
         vehicleCost(vehicleCost_) {
     }
 };
@@ -35,7 +31,10 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath);
 
 extern void taskDataDelete(TaskData* taskData);
 
-extern int euclideanDistance(const std::pair<int, int>& a,
-    const std::pair<int, int>& b);
+template<class T1, class T2>
+extern int euclideanDistance(T1& a, T2& b) {
+    double distance = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+    return (int) (distance * 100);
+}
 
 #endif // UTILS_HPP

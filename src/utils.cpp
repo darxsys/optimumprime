@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <vector>
 
 #include "utils.hpp"
@@ -23,8 +22,6 @@ using namespace std;
 extern void taskDataCreate(TaskData** taskData, char* inputPath);
 
 extern void taskDataDelete(TaskData* taskData);
-
-extern int euclideanDistance(const pair<int, int>& a, const pair<int, int>& b);
 
 // ***************************************************************************
 
@@ -57,8 +54,9 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
     int vehicleCapacity = 0;
     int vehicleCost = -1;
 
-    parseFile(&storageLen, storageCoordinates, storageCapacity, storageCost, &userLen,
-        userCoordinates, userDemand, &vehicleCapacity, &vehicleCost, inputPath);
+    parseFile(&storageLen, storageCoordinates, storageCapacity,
+        storageCost, &userLen, userCoordinates, userDemand,
+        &vehicleCapacity, &vehicleCost, inputPath);
 
     ASSERT(userLen > 0, "invalid number of users");
     ASSERT(storageLen > 0, "invalid number of storages");
@@ -67,17 +65,32 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
     ASSERT(vehicleCapacity > 0, "invalid vehicle capacity");
     ASSERT(vehicleCost > -1, "invalid vehicle cost");
 
-    *taskData = new TaskData(storageLen, storageCoordinates, storageCapacity, storageCost,
-        userLen, userCoordinates, userDemand, vehicleCapacity, vehicleCost);
+    vector<Storage> storages;
+    storages.reserve(storageLen);
+
+    vector<User> users;
+    users.reserve(userLen);
+
+    for (int i = 0; i < storageLen; ++i) {
+        Storage storage(storageCoordinates[i].first, storageCoordinates[i].second,
+            storageCapacity[i], storageCost[i]); 
+
+        storages.push_back(storage);
+    }
+
+    for (int i = 0; i < userLen; ++i) {
+        User user(userCoordinates[i].first, userCoordinates[i].second,
+            userDemand[i]); 
+
+        users.push_back(user);
+    }
+
+    *taskData = new TaskData(storageLen, storages, userLen, users,
+        vehicleCapacity, vehicleCost);
 }
 
 extern void taskDataDelete(TaskData* taskData) {
     delete taskData;
-}
-
-extern int euclideanDistance(const pair<int, int>& a, const pair<int, int>& b) {
-    double distance = sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
-    return (int) (distance * 100);
 }
 
 // ***************************************************************************
