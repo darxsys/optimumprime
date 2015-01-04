@@ -35,4 +35,7 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath);
 
 extern void taskDataDelete(TaskData* taskData);
 
+extern int euclideanDistance(const std::pair<int, int>& a,
+    const std::pair<int, int>& b);
+
 #endif // UTILS_HPP

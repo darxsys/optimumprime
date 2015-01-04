@@ -4,8 +4,6 @@
 
 #include "utils.hpp"
 
-using namespace std;
-
 #define ASSERT(expr, fmt, ...)\
     do {\
         if (!(expr)) {\

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <vector>
 
 #include "utils.hpp"
@@ -22,6 +23,8 @@ using namespace std;
 extern void taskDataCreate(TaskData** taskData, char* inputPath);
 
 extern void taskDataDelete(TaskData* taskData);
+
+extern int euclideanDistance(const pair<int, int>& a, const pair<int, int>& b);
 
 // ***************************************************************************
 
@@ -70,6 +73,11 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
 
 extern void taskDataDelete(TaskData* taskData) {
     delete taskData;
+}
+
+extern int euclideanDistance(const pair<int, int>& a, const pair<int, int>& b) {
+    double distance = sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
+    return (int) (distance * 100);
 }
 
 // ***************************************************************************
