@@ -228,5 +228,69 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
 }
 
 Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
-    
+
+    vector<Storage*>& openStorages = instance->openStorages;
+    vector<int>& representation = instance->representation;
+
+    vector<vector<User*> > groups(openStorages.size());
+
+    for (int i = 0; i < (int) representation.size(); ++i) {
+        groups[representation[i]].push_back(&data->users[i]);
+    }
+
+    vector<vector<vector<float> > > eta(openStorages.size());
+    vector<vector<vector<float> > > pheromons(openStorages.size());
+
+    float avgDistance = 0;
+    int edges = 0;
+
+    // init
+    for (int i = 0; i < (int) openStorages.size(); ++i) {
+
+        int size = groups[i].size() + 1;
+
+        edges += (size * (size - 1)) / 2;
+
+        eta[i].resize(size);
+        pheromons[i].resize(size);
+
+        for (int j = 0; j < size; ++j) {
+
+            eta[i][j].resize(size, -1);
+
+            if (j == 0) continue;
+
+            float distance = euclideanDistance(*openStorages[i], *groups[i][j-1]);
+            avgDistance += distance;
+
+            eta[i][0][j] = 1.0 / distance;
+            eta[i][j][0] = eta[i][0][j];
+        }
+
+        for (int j = 1; j < size; ++j) {
+            for (int k = j + 1; k < size; ++k) {
+                float distance = euclideanDistance(*groups[i][j-1], *groups[i][k-1]);
+                avgDistance += distance;
+
+                eta[i][j][k] = 1.0 / distance;
+                eta[i][k][j] = eta[i][j][k];
+            }
+        }
+    }
+
+    avgDistance /= (float) edges;
+
+    for (int i = 0; i < (int) openStorages.size(); ++i) {
+
+        int size = groups[i].size() + 1;
+
+        for (int j = 0; j < size; ++j) {
+            pheromons[i][j].resize(size, 1.0 / avgDistance);
+        }
+    }
+
+
+    Solution sol;
+
+    return sol;
 }

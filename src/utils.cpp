@@ -98,6 +98,8 @@ extern void printSolution(const Solution* sol, char* outputFile) {
     }
 
     fprintf(out, "%d\n", sol->cost);
+
+    fclose(out);
 }
 
 // ***************************************************************************

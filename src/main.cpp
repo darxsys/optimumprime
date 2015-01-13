@@ -31,12 +31,13 @@ int main(int argc, char* argv[]) {
     best.cost = 2000000000;
 
     for (int i = 0; i < (int) preprocResults.size(); ++i) {
-        Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
+        // Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
+        Solution sol2 = solveGroupsAntColony(taskData, &preprocResults[i]);
 
-        if (best.cost > sol.cost) {
-            best = sol;
-            printf("BEST %d\n", best.cost);
-        }
+        // if (best.cost > sol.cost) {
+        //    best = sol;
+        //    printf("BEST %d\n", best.cost);
+        //}
     }
 
     printSolution(&best, "solution.txt");
