@@ -17,26 +17,9 @@ int main(int argc, char* argv[]) {
 
     srand(time(NULL));
 
-    // MEĐIK
     std::vector<PreprocResult> preprocResults;
-    // preprocGreedyStorage(preprocResults, taskData);
+    preprocGreedyStorage(preprocResults, taskData);
     preprocGreedyUser(preprocResults, taskData);
-
-    /*for (int i = 0; i < (int) preprocResults.size(); ++i) {
-        printf("[%d] ", i);
-        for (int j = 0; j < (int) preprocResults[i].openStorages.size(); ++j) {
-            printf("%d ", preprocResults[i].openStorages[j]->id);
-        }
-        printf("\n");
-        for (int j = 0; j < (int) taskData->userLen; ++j) {
-            printf("%d ", preprocResults[i].representation[j]);
-        }
-        printf("\n");
-    }
-
-    taskDataDelete(taskData);
-
-    return 0;*/
 
     Solution best;
     best.cost = 2000000000;

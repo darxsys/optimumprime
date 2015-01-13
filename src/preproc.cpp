@@ -50,6 +50,8 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
 
         vector<int> representation(taskData->userLen, -1);
 
+        int valid = 1;
+
         for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
 
             int storageIdx = storageSubsets[i][j];
@@ -60,6 +62,11 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
                 if (representation[k] == -1) {
                     users.emplace_back(eucliedanDistances[k][storageIdx], taskData->users[k].id);
                 }
+            }
+
+            if ((int) users.size() == 0) {
+                valid = 0;
+                break;
             }
 
             sort(users.begin(), users.end());
@@ -78,8 +85,6 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
                 representation[userIdx] = j;
             }
         }
-
-        int valid = 1;
 
         for (int j = 0; j < taskData->userLen; ++j) {
             if (representation[j] == -1) {
