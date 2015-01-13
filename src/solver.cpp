@@ -236,7 +236,7 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
 
 Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
-    float fi = 0.3;
+    float fi = 0.25;
     float alpha = 1;
     float beta = 1;
 
