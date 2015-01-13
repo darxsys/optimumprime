@@ -6,6 +6,7 @@
 
 #include "utils.hpp"
 #include "preproc.hpp"
+#include "genetic.hpp"
 
 using namespace std;
 
@@ -15,6 +16,8 @@ using namespace std;
 extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskData);
 
 extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData);
+
+extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData);
 
 // ***************************************************************************
 
@@ -169,6 +172,38 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
 
             result.push_back(PreprocResult(openStorages, representation));
         }
+    }
+}
+
+extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData) {
+
+    int userDemand = 0;
+
+    for (int i = 0; i < taskData->userLen; ++i) {
+        userDemand += taskData->users[i].demand;
+    }
+
+    vector<vector<int> > storageSubsets;
+    storageSubsetsCreate(storageSubsets, taskData->storages, userDemand);
+
+    for (int i = 0; i < (int) storageSubsets.size(); ++i) {
+
+        vector<Storage> openStorages;
+
+        for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
+            openStorages.push_back(taskData->storages[storageSubsets[i][j]]);
+        }
+
+        Chromosom chromosom = geneticGroupClients(taskData, 70, 15000,
+            openStorages);
+
+        vector<Storage*> openStoragesPtrs;
+
+        for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
+            openStoragesPtrs.push_back(&taskData->storages[storageSubsets[i][j]]);
+        }
+
+        result.push_back(PreprocResult(openStoragesPtrs, chromosom.representation));
     }
 }
 

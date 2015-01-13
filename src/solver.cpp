@@ -236,7 +236,7 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
 
 Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
-    float fi = 0.4;
+    float fi = 0.3;
     float alpha = 1;
     float beta = 1;
 
@@ -257,6 +257,8 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
     for (int i = 0; i < (int) openStorages.size(); ++i) {
 
         int groupLen = groups[i].size() + 1;
+
+        if (groupLen == 1) continue;
 
         float avgDistance = 0;
         int edges = (groupLen * (groupLen - 1)) / 2;
@@ -305,6 +307,11 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         int numSteps = 0;
         int antsLen = groups[i].size() * 2;
         int groupLen = groups[i].size();
+
+        if (groupLen == 0) {
+            sol.cost += storage->cost;
+            continue;
+        }
 
         Solution best;
         best.cost = 1000000000;

@@ -17,29 +17,44 @@ int main(int argc, char* argv[]) {
 
     srand(time(NULL));
 
+    Timeval preprocTimer;
+    timerStart(&preprocTimer);
+
     std::vector<PreprocResult> preprocResults;
     preprocGreedyStorage(preprocResults, taskData);
     preprocGreedyUser(preprocResults, taskData);
+    preprocGenetic(preprocResults, taskData);
+
+    fprintf(stderr, "[preproc found %d subsets]\n", (int) preprocResults.size());
+    timerPrint("preproc", timerStop(&preprocTimer));
 
     Solution best;
     best.cost = 2000000000;
 
-    for (int i = 0; i < (int) preprocResults.size(); ++i) {
-        // Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
-        Solution sol2 = solveGroupsAntColony(taskData, &preprocResults[i]);
+    Timeval solveTimer;
+    timerStart(&solveTimer);
 
-        /*if (best.cost > sol.cost) {
+    for (int i = 0; i < (int) preprocResults.size(); ++i) {
+        Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
+
+        if (best.cost > sol.cost) {
             best = sol;
-            printf("BEST1 %d\n", best.cost);
-        }*/
+            printf("BEST [Greedy] %d\n", best.cost);
+        } else {
+            printf("Greedy: %d\n", sol.cost);
+        }
+
+        Solution sol2 = solveGroupsAntColony(taskData, &preprocResults[i]);
 
         if (best.cost > sol2.cost) {
             best = sol2;
-            printf("BEST2 %d\n", best.cost);
+            printf("BEST [AntColony] %d\n", best.cost);
         } else {
-            printf("%d\n", sol2.cost);
+            printf("AntColony %d\n", sol2.cost);
         }
     }
+
+    timerPrint("solve", timerStop(&solveTimer));
 
     printSolution(&best, "solution.txt");
 
