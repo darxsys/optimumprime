@@ -206,7 +206,7 @@ extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData) {
             openStorages.push_back(taskData->storages[storageSubsets[i][j]]);
         }
 
-        Chromosom chromosom = geneticGroupClients(taskData, 80, 25000,
+        Chromosom chromosom = geneticGroupClients(taskData, 50, 75000,
             openStorages);
 
         vector<Storage*> openStoragesPtrs;
