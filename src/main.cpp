@@ -36,6 +36,8 @@ int main(int argc, char* argv[]) {
         if (best.cost > sol2.cost) {
             best = sol2;
             printf("BEST2 %d\n", best.cost);
+        } else {
+            printf("%d\n", sol2.cost);
         }
     }
 
