@@ -22,4 +22,7 @@ extern void preprocGreedyUser(std::vector<PreprocResult>& result,
 extern void preprocGenetic(std::vector<PreprocResult>& result,
     TaskData* taskData);
 
+extern void preprocSimulatedAnnealing(std::vector<PreprocResult>& result,
+    TaskData* taskData);
+
 #endif // PREPROC_HPP

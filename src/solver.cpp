@@ -305,7 +305,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         Storage* storage = openStorages[i];
 
         int numSteps = 0;
-        int antsLen = groups[i].size() * 2;
+        int antsLen = groups[i].size() * 2.5;
         int groupLen = groups[i].size();
 
         if (groupLen == 0) {
@@ -316,7 +316,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         Solution best;
         best.cost = 1000000000;
 
-        while (numSteps < 5000) {
+        while (numSteps < 100) {
 
             vector<tuple<vector<int>, int, Solution> > ants(antsLen);
 

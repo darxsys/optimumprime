@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <vector>
+#include <set>
 #include <algorithm>
 
 #include "utils.hpp"
@@ -19,6 +20,8 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
 
 extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData);
 
+extern void preprocSimulatedAnnealing(vector<PreprocResult>& result, TaskData* taskData);
+
 // ***************************************************************************
 
 // ***************************************************************************
@@ -31,6 +34,11 @@ static void storageSubsetsCreate(vector<vector<int> >& result,
 
 static void euclideanDistancesCreate(vector<vector<int> >& result,
     vector<Storage>& storages, vector<User>& users);
+
+static int saRepCost(vector<int>& rep, vector<int>& storages,
+    vector<vector<int> >& distances);
+
+static int validRep(vector<int>& rep, vector<int>& storages, TaskData* taskData);
 
 // ***************************************************************************
 // PUBLIC
@@ -207,6 +215,141 @@ extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData) {
     }
 }
 
+extern void preprocSimulatedAnnealing(vector<PreprocResult>& result, TaskData* taskData) {
+
+    int userDemand = 0;
+
+    for (int i = 0; i < taskData->userLen; ++i) {
+        userDemand += taskData->users[i].demand;
+    }
+
+    vector<vector<int> > storageSubsets;
+    storageSubsetsCreate(storageSubsets, taskData->storages, userDemand);
+
+    vector<vector<int> > eucliedanDistances;
+    euclideanDistancesCreate(eucliedanDistances, taskData->storages, taskData->users);
+
+    for (int i = 0; i < (int) storageSubsets.size(); ++i) {
+
+        int openStoragesLen = storageSubsets[i].size();
+
+        vector<int> capacities(openStoragesLen, 0);
+        vector<int> init(taskData->userLen, -1);
+
+        int valid = 1;
+
+        // s0
+        for (int j = 0; j < taskData->userLen; ++j) {
+            for (int k = 0; k < openStoragesLen; ++k) {
+                if (taskData->users[j].demand + capacities[k] >
+                        taskData->storages[storageSubsets[i][k]].capacity) {
+                    continue;
+                }
+
+                init[j] = k;
+                capacities[k] += taskData->users[j].demand;
+                break;
+            }
+
+            if (init[j] == -1) {
+                valid = 0;
+                break;
+            }
+        }
+
+        if (!valid) continue;
+
+        if (!validRep(init, storageSubsets[i], taskData)) {      
+            printf("INIT not valid\n");
+        }
+
+        vector<int> repCurr(init);
+        int costCurr = saRepCost(repCurr, storageSubsets[i], eucliedanDistances);
+
+        vector<int> repBest(repCurr);
+        int costBest = costCurr;
+
+        // t0, tf, lambda
+        double temperature = 550.0;
+        double tempMin = 0.01;
+        double lambda = 0.99;
+
+        vector<int> capacitiesCurr(capacities);
+
+        while (temperature > tempMin) {
+
+            // select a valid neighbour
+            vector<int> neighbour(repCurr);
+
+            set<int> changeList;
+            int changeListLen = taskData->userLen / 33;
+
+            while ((int) changeList.size() != changeListLen) {
+                changeList.insert(rand() % taskData->userLen);
+            }
+
+            vector<int> capacitiesNew(capacitiesCurr);
+
+            set<int>::iterator it;
+            for (it = changeList.begin(); it != changeList.end(); ++it) {
+
+                while (true) {
+                    int demand = taskData->users[*it].demand;
+
+                    capacitiesNew[neighbour[*it]] -= demand;
+
+                    neighbour[*it] = (neighbour[*it] + 1) % openStoragesLen;
+
+                    int idx = neighbour[*it];
+
+                    capacitiesNew[idx] += demand;
+
+                    if (taskData->storages[storageSubsets[i][idx]].capacity >=
+                            capacitiesNew[idx]) {
+                        break;
+                    }
+                }
+            }
+
+            if (!validRep(neighbour, storageSubsets[i], taskData)) {      
+                printf("NEIGHBOUR not valid\n");
+            }
+
+            int costNew = saRepCost(neighbour, storageSubsets[i], eucliedanDistances);
+            int costDiff = abs(costCurr - costNew);
+
+            if (costNew < costCurr) {
+
+                repCurr = neighbour;
+                costCurr = costNew;
+                capacitiesCurr = capacitiesNew;
+
+            } else if (((double) rand() / (double) RAND_MAX) <
+                    exp(-1.0 * costDiff / temperature)) {
+
+                repCurr = neighbour;
+                costCurr = costNew;
+                capacitiesCurr = capacitiesNew;
+            }
+
+            if (costCurr < costBest) {
+                repBest = repCurr;
+                costBest = costCurr;
+            }
+
+            temperature *= lambda;
+        }
+
+        vector<Storage*> openStorages;
+
+        for (int j = 0; j < (int) openStoragesLen; ++j) {
+            openStorages.push_back(&taskData->storages[storageSubsets[i][j]]);
+        }
+
+        result.push_back(PreprocResult(openStorages, repBest));
+    }
+}
+
 // ***************************************************************************
 
 // ***************************************************************************
@@ -247,6 +390,39 @@ static void euclideanDistancesCreate(vector<vector<int> >& result,
             result[i].push_back(euclideanDistance(users[i], storages[j]));
         }
     }
+}
+
+static int saRepCost(vector<int>& rep, vector<int>& storages,
+    vector<vector<int> >& distances) {
+
+    int cost = 0;
+
+    for (int i = 0; i < (int) rep.size(); ++i) {
+        int storageIdx = storages[rep[i]];
+
+        cost += distances[i][storageIdx];
+    }
+
+    return cost;
+}
+
+static int validRep(vector<int>& rep, vector<int>& storages, TaskData* taskData) {
+
+    int openStoragesLen = storages.size();
+
+    vector<int> capacities(openStoragesLen, 0);
+
+    for (int i = 0; i < taskData->userLen; ++i) {
+        capacities[rep[i]] += taskData->users[i].demand;
+    }
+
+    for (int i = 0; i < openStoragesLen; ++i) {
+        if (capacities[i] > taskData->storages[storages[i]].capacity) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 // ***************************************************************************

@@ -21,9 +21,11 @@ int main(int argc, char* argv[]) {
     timerStart(&preprocTimer);
 
     std::vector<PreprocResult> preprocResults;
-    preprocGreedyStorage(preprocResults, taskData);
-    preprocGreedyUser(preprocResults, taskData);
+
+    // preprocGreedyStorage(preprocResults, taskData);
+    // preprocGreedyUser(preprocResults, taskData);
     preprocGenetic(preprocResults, taskData);
+    // preprocSimulatedAnnealing(preprocResults, taskData);
 
     fprintf(stderr, "[preproc found %d subsets]\n", (int) preprocResults.size());
     timerPrint("preproc", timerStop(&preprocTimer));
@@ -35,6 +37,12 @@ int main(int argc, char* argv[]) {
     timerStart(&solveTimer);
 
     for (int i = 0; i < (int) preprocResults.size(); ++i) {
+        printf("[%d] ", i);
+        for (int j = 0; j < (int) preprocResults[i].openStorages.size(); ++j) {
+            printf("%d ", preprocResults[i].openStorages[j]->id);
+        }
+        printf("\n");
+
         Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
 
         if (best.cost > sol.cost) {

@@ -6,7 +6,7 @@ NAME = optimumprime
 OBJ_DIR = obj
 SRC_DIR = src
 
-CP_FLAGS = -c -std=c++0x -Wall -O2
+CP_FLAGS = -c -std=c++0x -Wall -g
 LD_FLAGS = 
 
 SRC = $(shell find $(SRC_DIR) -type f -regex ".*\.cpp")
