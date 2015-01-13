@@ -16,6 +16,8 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
 
 extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData);
 
+extern void preprocAntColony(vector<PreprocResult>& result, TaskData* taskData);
+
 // ***************************************************************************
 
 // ***************************************************************************
@@ -58,7 +60,7 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
 
             for (int k = 0; k < (int) taskData->userLen; ++k) {
                 if (representation[k] == -1) {
-                    users.emplace_back(eucliedanDistances[k][storageIdx], k);
+                    users.emplace_back(eucliedanDistances[k][storageIdx], taskData->users[k].id);
                 }
             }
 
@@ -75,7 +77,7 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
                 }
 
                 demand += taskData->users[userIdx].demand;
-                representation[userIdx] = storageIdx;
+                representation[userIdx] = j;
             }
         }
 
@@ -89,7 +91,13 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
         }
 
         if (valid) {
-            result.push_back(PreprocResult(storageSubsets[i], representation));
+            vector<Storage*> openStorages;
+
+            for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
+                openStorages.push_back(&taskData->storages[storageSubsets[i][j]]);
+            }
+
+            result.push_back(PreprocResult(openStorages, representation));
         }
     }
 }
@@ -115,25 +123,26 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
 
         for (int j = 0; j < (int) taskData->users.size(); ++j) {
 
-            vector<pair<int, int> > storages;
+            vector<tuple<int, int, int> > storages;
 
             for (int k = 0; k < (int) storageSubsets[i].size(); ++k) {
                 int storageIdx = storageSubsets[i][k];
-                storages.emplace_back(eucliedanDistances[j][storageIdx], storageIdx);
+                storages.emplace_back(eucliedanDistances[j][storageIdx], storageIdx, k);
             }
 
             sort(storages.begin(), storages.end());
 
             for (int k = 0; k < (int) storageSubsets[i].size(); ++k) {
-                int storageIdx = storages[k].second;
+                int storageIdx = get<1>(storages[k]);
+                int idx = get<2>(storages[k]);
 
-                if (storageDemands[k] + taskData->users[j].demand >
+                if (storageDemands[idx] + taskData->users[j].demand >
                     taskData->storages[storageIdx].capacity) {
                     continue;
                 }
 
-                storageDemands[k] += taskData->users[j].demand;
-                representation[j] = storageIdx;
+                storageDemands[idx] += taskData->users[j].demand;
+                representation[j] = idx;
                 break;
             }
 
@@ -149,9 +158,19 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
         }
 
         if (valid) {
-            result.push_back(PreprocResult(storageSubsets[i], representation));
+            vector<Storage*> openStorages;
+
+            for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
+                openStorages.push_back(&taskData->storages[storageSubsets[i][j]]);
+            }
+
+            result.push_back(PreprocResult(openStorages, representation));
         }
     }
+}
+
+extern void preprocAntColony(vector<PreprocResult>& result, TaskData* taskData) {
+    
 }
 
 // ***************************************************************************

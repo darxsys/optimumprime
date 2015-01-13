@@ -1,15 +1,15 @@
 #ifndef STORAGE_HPP
 #define STORAGE_HPP
 
-struct Storage {
+#include "node.hpp"
 
-    int x;
-    int y;
+struct Storage : Node {
+
     int capacity;
     int cost;
 
-    Storage(int x_, int y_, int capacity_, int cost_) :
-        x(x_), y(y_), capacity(capacity_), cost(cost_) {
+    Storage(int id_, int x_, int y_, int capacity_, int cost_) :
+       Node(id_, x_, y_), capacity(capacity_), cost(cost_) {
     }
 };
 

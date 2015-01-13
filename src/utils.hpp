@@ -5,8 +5,22 @@
 #include <vector>
 #include <math.h>
 
+#include "timer.h"
+#include "thread.h"
+#include "threadpool.h"
+
+#include "node.hpp"
 #include "user.hpp"
 #include "storage.hpp"
+#include "solution.hpp"
+
+#define ASSERT(expr, fmt, ...)\
+    do {\
+        if (!(expr)) {\
+            fprintf(stderr, "[ERROR]: " fmt "\n", ##__VA_ARGS__);\
+            exit(-1);\
+        }\
+    } while (0)
 
 struct TaskData {
 
@@ -28,6 +42,8 @@ struct TaskData {
 extern void taskDataCreate(TaskData** taskData, char* inputPath);
 
 extern void taskDataDelete(TaskData* taskData);
+
+extern void printSolution(const Solution* sol, char* outputFile);
 
 template<class T1, class T2>
 extern int euclideanDistance(T1& a, T2& b) {

@@ -1,17 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "utils.hpp"
 #include "preproc.hpp"
-
-#define ASSERT(expr, fmt, ...)\
-    do {\
-        if (!(expr)) {\
-            fprintf(stderr, "[ERROR]: " fmt "\n", ##__VA_ARGS__);\
-            exit(-1);\
-        }\
-    } while (0)
-
+#include "solver.hpp"
+#include "utils.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -27,13 +19,27 @@ int main(int argc, char* argv[]) {
     preprocGreedyStorage(preprocResults, taskData);
     preprocGreedyUser(preprocResults, taskData);
 
-    for (int i = 0; i < (int) preprocResults.size(); ++i) {
+    /*for (int i = 0; i < (int) preprocResults.size(); ++i) {
         printf("[%d] ", i);
         for (int j = 0; j < (int) taskData->userLen; ++j) {
             printf("%d ", preprocResults[i].representation[j]);
         }
         printf("\n");
+    }*/
+
+    Solution best;
+    best.cost = 2000000000;
+
+    for (int i = 0; i < (int) preprocResults.size(); ++i) {
+        Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
+
+        if (best.cost > sol.cost) {
+            best = sol;
+            printf("BEST %d\n", best.cost);
+        }
     }
+
+    printSolution(&best, "solution.txt");
 
     taskDataDelete(taskData);
 

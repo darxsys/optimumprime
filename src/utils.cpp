@@ -6,14 +6,6 @@
 
 #define BUFFER_SIZE 1024
 
-#define ASSERT(expr, fmt, ...)\
-    do {\
-        if (!(expr)) {\
-            fprintf(stderr, "[ERROR]: " fmt "\n", ##__VA_ARGS__);\
-            exit(-1);\
-        }\
-    } while (0)
-
 using namespace std;
 
 // ***************************************************************************
@@ -22,6 +14,8 @@ using namespace std;
 extern void taskDataCreate(TaskData** taskData, char* inputPath);
 
 extern void taskDataDelete(TaskData* taskData);
+
+extern void printSolution(const Solution* sol, char* outputFile);
 
 // ***************************************************************************
 
@@ -72,12 +66,12 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
     users.reserve(userLen);
 
     for (int i = 0; i < storageLen; ++i) {
-        storages.emplace_back(storageCoordinates[i].first, storageCoordinates[i].second,
+        storages.emplace_back(i, storageCoordinates[i].first, storageCoordinates[i].second,
             storageCapacity[i], storageCost[i]);
     }
 
     for (int i = 0; i < userLen; ++i) {
-        users.emplace_back(userCoordinates[i].first, userCoordinates[i].second,
+        users.emplace_back(i, userCoordinates[i].first, userCoordinates[i].second,
             userDemand[i]);
     }
 
@@ -87,6 +81,23 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
 
 extern void taskDataDelete(TaskData* taskData) {
     delete taskData;
+}
+
+extern void printSolution(const Solution* sol, char* outputFile) {
+
+    FILE *out = fopen(outputFile, "w");
+    ASSERT(out != NULL, "Can't open output file.");
+
+    fprintf(out, "%d\n", sol->numPaths);
+    for (int i = 0; i < sol->numPaths; ++i) {
+        for (int j = 0; j < (int) sol->cycles[i].size(); ++j) {
+            fprintf(out, "%d ", sol->cycles[i][j]);
+        }
+
+        fprintf(out, "\n");
+    }
+
+    fprintf(out, "%d\n", sol->cost);
 }
 
 // ***************************************************************************

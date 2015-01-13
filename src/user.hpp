@@ -1,14 +1,14 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-struct User {
+#include "node.hpp"
 
-    int x;
-    int y;
+struct User : Node {
+
     int demand;
 
-    User(int x_, int y_, int demand_) :
-        x(x_), y(y_), demand(demand_) {
+    User(int id_, int x_, int y_, int demand_) :
+        Node(id_, x_, y_), demand(demand_) {
     }
 };
 
