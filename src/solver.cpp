@@ -316,7 +316,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         Solution best;
         best.cost = 1000000000;
 
-        while (numSteps < 100) {
+        while (numSteps < 5000) {
 
             vector<tuple<vector<int>, int, Solution> > ants(antsLen);
 

@@ -98,7 +98,7 @@ void Chromosom::calculateCost(std::vector<User> users, std::vector<Storage> stor
 }
 
 void Chromosom::mutation() {
-	int max = rand() % ((int)(1 + representation.size() / 10));
+	int max = rand() % ((int)(1 + representation.size() / 8.0));
 	
 	int index;
 	for (int i = 0; i < max; i++) {
