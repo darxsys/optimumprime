@@ -16,8 +16,6 @@ extern void preprocGreedyStorage(vector<PreprocResult>& result, TaskData* taskDa
 
 extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData);
 
-extern void preprocAntColony(vector<PreprocResult>& result, TaskData* taskData);
-
 // ***************************************************************************
 
 // ***************************************************************************
@@ -167,10 +165,6 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
             result.push_back(PreprocResult(openStorages, representation));
         }
     }
-}
-
-extern void preprocAntColony(vector<PreprocResult>& result, TaskData* taskData) {
-    
 }
 
 // ***************************************************************************

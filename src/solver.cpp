@@ -226,3 +226,7 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
     sol.cost += costOpenStorages;
     return sol;
 }
+
+Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
+    
+}

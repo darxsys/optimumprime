@@ -19,7 +19,4 @@ extern void preprocGreedyStorage(std::vector<PreprocResult>& result,
 extern void preprocGreedyUser(std::vector<PreprocResult>& result,
     TaskData* taskData);
 
-extern void preprocAntColony(std::vector<PreprocResult>& result,
-    TaskData* taskData);
-
 #endif // PREPROC_HPP

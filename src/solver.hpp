@@ -8,4 +8,6 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* preprocResult);
 
 Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* preprocResult);
 
+Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance);
+
 #endif // SOLVER_HPP
