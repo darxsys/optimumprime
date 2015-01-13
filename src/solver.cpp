@@ -343,7 +343,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                         float p = pow(pheromons[i][curr][*it], alpha) *
                             pow(1.0 / distances[i][curr][*it], beta);
 
-                        if (max < p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
+                        if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
                             max = p;
                             next = *it;
                         }
