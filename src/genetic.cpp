@@ -7,15 +7,13 @@
 
 #include "genetic.hpp"
 
-Chromosom localImprovement(Chromosom& chromosom, TaskData* taskData,
+extern Chromosom localImprovement(Chromosom& chromosom, TaskData* taskData,
     std::vector<Storage*>& storages);
 
-Chromosom localImprovementExtra(Chromosom& chromosom, TaskData* taskData,
+extern Chromosom localImprovementExtra(Chromosom& chromosom, TaskData* taskData,
     std::vector<Storage*>& storages);
 
-int closestStorage(User& user, std::vector<Storage*>& storages);
-
-Chromosom chooseParent(std::vector<Chromosom>& population) {
+static Chromosom chooseParent(std::vector<Chromosom>& population) {
 
     double maxCost = population[population.size() - 1].cost;
 
@@ -42,7 +40,29 @@ Chromosom chooseParent(std::vector<Chromosom>& population) {
     return population[population.size() - 1];
 }
 
-Chromosom geneticGroupClients(TaskData *taskData, int populationLen, int iteration,
+static int closestStorage(User& user, std::vector<Storage*>& storages) {
+
+    double minCost = INT_MAX;
+    double cost;
+
+    int index = 0;
+
+    for (int i = 0; i < (int) storages.size(); i++) {
+        Storage* storage = storages[i];
+        cost = (storage->x - user.x) * (storage->x - user.x) / 10.0 +
+            (storage->y - user.y) * (storage->y - user.y) / 10.0;
+
+        if (cost < minCost) {
+            index = i;
+            minCost = cost;
+        }
+    }
+
+    return index;
+}
+
+
+extern Chromosom geneticGroupClients(TaskData *taskData, int populationLen, int iteration,
     std::vector<Storage*>& storages) {
 
     //initialization
@@ -120,28 +140,8 @@ Chromosom geneticGroupClients(TaskData *taskData, int populationLen, int iterati
     return result;
 }
 
-int closestStorage(User& user, std::vector<Storage*>& storages) {
 
-    double minCost = INT_MAX;
-    double cost;
-
-    int index = 0;
-
-    for (int i = 0; i < (int) storages.size(); i++) {
-        Storage* storage = storages[i];
-        cost = (storage->x - user.x) * (storage->x - user.x) / 10.0 +
-            (storage->y - user.y) * (storage->y - user.y) / 10.0;
-
-        if (cost < minCost) {
-            index = i;
-            minCost = cost;
-        }
-    }
-
-    return index;
-}
-
-Chromosom localImprovement(Chromosom& chromosom, TaskData *taskData,
+extern Chromosom localImprovement(Chromosom& chromosom, TaskData *taskData,
     std::vector<Storage*>& storages) {
     
     int size = chromosom.representation.size();
@@ -191,7 +191,7 @@ Chromosom localImprovement(Chromosom& chromosom, TaskData *taskData,
     return chromosom;   
 }
 
-Chromosom localImprovementExtra(Chromosom& chromosom, TaskData *taskData,
+extern Chromosom localImprovementExtra(Chromosom& chromosom, TaskData *taskData,
     std::vector<Storage*>& storages) {
 
     bool changed = false;

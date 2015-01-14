@@ -4,6 +4,7 @@
 
 #include "preproc.hpp"
 #include "solver.hpp"
+#include "postproc.hpp"
 #include "utils.hpp"
 
 static void printStorageGroup(std::vector<Storage*>& storages);
@@ -30,6 +31,7 @@ int main(int argc, char* argv[]) {
     solBest.cost = 123456789;
 
     for (int i = 0; i < (int) storageSubsets.size(); ++i) {
+
         printStorageGroup(storageSubsets[i]);
 
         PreprocResult* result = NULL;
@@ -39,16 +41,19 @@ int main(int argc, char* argv[]) {
         if (result != NULL) {
 
             Solution sol1 = solveGroupsGreedyOne(taskData, result);
+            sol1 = postprocGreedy(&sol1, taskData);
+
             Solution sol2 = solveGroupsAntColony(taskData, result);
+            sol2 = postprocGreedy(&sol2, taskData);
 
             if (sol1.cost < solBest.cost) {
                 solBest = sol1;
-                fprintf(stderr, "[BEST][GR][GR] %d\n", solBest.cost);
+                fprintf(stderr, "[BEST][GR][GR][GR] %d\n", solBest.cost);
             }
 
             if (sol2.cost < solBest.cost) {
                 solBest = sol2;
-                fprintf(stderr, "[BEST][GR][ACO] %d\n", solBest.cost);
+                fprintf(stderr, "[BEST][GR][ACO][GR] %d\n", solBest.cost);
             }
 
             delete result;
@@ -60,16 +65,19 @@ int main(int argc, char* argv[]) {
         if (result != NULL) {
 
             Solution sol1 = solveGroupsGreedyOne(taskData, result);
+            sol1 = postprocGreedy(&sol1, taskData);
+
             Solution sol2 = solveGroupsAntColony(taskData, result);
+            sol2 = postprocGreedy(&sol2, taskData);
 
             if (sol1.cost < solBest.cost) {
                 solBest = sol1;
-                fprintf(stderr, "[BEST][GA][GR] %d\n", solBest.cost);
+                fprintf(stderr, "[BEST][GA][GR][GR] %d\n", solBest.cost);
             }
 
             if (sol2.cost < solBest.cost) {
                 solBest = sol2;
-                fprintf(stderr, "[BEST][GA][ACO] %d\n", solBest.cost);
+                fprintf(stderr, "[BEST][GA][ACO][GR] %d\n", solBest.cost);
             }
 
             delete result;
@@ -81,16 +89,19 @@ int main(int argc, char* argv[]) {
         if (result != NULL) {
 
             Solution sol1 = solveGroupsGreedyOne(taskData, result);
+            sol1 = postprocGreedy(&sol1, taskData);
+
             Solution sol2 = solveGroupsAntColony(taskData, result);
+            sol2 = postprocGreedy(&sol2, taskData);
 
             if (sol1.cost < solBest.cost) {
                 solBest = sol1;
-                fprintf(stderr, "[BEST][SA][GR] %d\n", solBest.cost);
+                fprintf(stderr, "[BEST][SA][GR][GR] %d\n", solBest.cost);
             }
 
             if (sol2.cost < solBest.cost) {
                 solBest = sol2;
-                fprintf(stderr, "[BEST][SA][ACO] %d\n", solBest.cost);
+                fprintf(stderr, "[BEST][SA][ACO][GR] %d\n", solBest.cost);
             }
 
             delete result;

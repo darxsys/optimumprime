@@ -13,17 +13,17 @@ using namespace std;
 #include "solver.hpp"
 
 // reverse sort
-bool cmpByDemand(const User* lhs, const User* rhs) {
+static bool cmpByDemand(const User* lhs, const User* rhs) {
     return lhs->demand > rhs->demand;
 }
 
-bool antByScore(const tuple<vector<int>, int, Solution>& la,
+static bool antByScore(const tuple<vector<int>, int, Solution>& la,
     const tuple<vector<int>, int, Solution>& ra) {
 
     return get<2>(la).cost < get<2>(ra).cost;
 }
 
-Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
+extern Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
 
     fprintf(stderr, "[Trivial] start\n");
 
@@ -120,7 +120,7 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
     return sol;
 }
 
-Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
+extern Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
 
     fprintf(stderr, "[Greedy] start\n");
 
@@ -228,7 +228,7 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
     return sol;
 }
 
-Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
+extern Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
     fprintf(stderr, "[AntColony] start\n");
 
