@@ -16,8 +16,8 @@ struct Chromosom {
     bool falseFlag;
 
     Chromosom(int, int);
-    Chromosom(Chromosom, Chromosom, int, int, int, int);
-    void calculateCost(std::vector<User>, std::vector<Storage>);
+    Chromosom(Chromosom&, Chromosom&, int, int, int, int);
+    void calculateCost(std::vector<User>&, std::vector<Storage*>&);
     void mutation();
 };
 

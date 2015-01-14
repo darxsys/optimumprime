@@ -173,7 +173,7 @@ extern void preprocGreedyUser(PreprocResult** result, TaskData* data,
 }
 
 extern void preprocGenetic(PreprocResult** result, TaskData* data,
-    vector<Storage*>& openStoragesPtrs) {
+    vector<Storage*>& openStorages) {
 
     fprintf(stderr, "[GeneticAlgorithm] start\n");
 
@@ -183,17 +183,11 @@ extern void preprocGenetic(PreprocResult** result, TaskData* data,
     int population = data->taskParams.gaPopulationLen;
     int iterations = data->taskParams.gaIterationsLen;
 
-    vector<Storage> openStorages;
-
-    for (int i = 0; i < (int) openStoragesPtrs.size(); ++i) {
-        openStorages.push_back(*openStoragesPtrs[i]);
-    }
-
     Chromosom chromosom = geneticGroupClients(data, population, iterations,
-            openStorages);
+        openStorages);
 
-    if (repValid(chromosom.representation, openStoragesPtrs, data)) {
-        *result = new PreprocResult(openStoragesPtrs, chromosom.representation);
+    if (repValid(chromosom.representation, openStorages, data)) {
+        *result = new PreprocResult(openStorages, chromosom.representation);
     } else {
         fprintf(stderr, "[GeneticAlgorithm] invalid representaiton\n");
     }
