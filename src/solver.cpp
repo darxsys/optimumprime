@@ -343,7 +343,7 @@ extern Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                 s.erase(start);
 
                 while (s.size() != 0) {
-                    double max = 0;
+
                     int next = -1;
 
                     int curr = get<0>(ants[j]).back();
@@ -351,23 +351,49 @@ extern Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                     double q = (double) rand() / (double) RAND_MAX;
 
                     if (q < q0) {
-                        set<int>::iterator it = s.begin();
-                        advance(it, rand() % s.size());
 
-                        if (get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
+                        set<int> feasible;
+
+                        for (set<int>::iterator it = s.begin(); it != s.end(); ++it) {
+                            if (get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
+                                feasible.insert(*it);
+                            }
+                        }
+
+                        if (feasible.size() != 0) {
+                            set<int>::iterator it = feasible.begin();
+                            advance(it, rand() % feasible.size());
+
                             next = *it;
                         }
-                    }
 
-                    if (next == -1) {
+                    } else {
+
+                        // double max = 0;
+
+                        vector<pair<double, int> > probs;
+
                         for (set<int>::iterator it = s.begin(); it != s.end(); ++it) {
 
                             double p = pow(pheromons[i][curr][*it], alpha) *
                                 pow(1.0 / distances[i][curr][*it], beta);
 
-                            if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
+                            probs.emplace_back(1 - p, *it);
+
+                            /*if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
                                 max = p;
                                 next = *it;
+                            }*/
+                        }
+
+                        sort(probs.begin(), probs.end());
+
+                        for (int k = 0; k < (int) probs.size(); ++k) {
+                            int user = probs[k].second;
+
+                            if (get<1>(ants[j]) >= groups[i][user - 1]->demand) {
+                                next = user;
+                                break;
                             }
                         }
                     }
