@@ -25,17 +25,14 @@ bool antByScore(const tuple<vector<int>, int, Solution>& la,
 
 Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
 
-    Timeval groupTimer, costOpenTimer, sortTimer, wTimer;
-
     // creation of groups
     vector<vector<User*> > storageGroups(instance->openStorages.size());
 
     const vector<int>& groups = instance->representation;
-    timerStart(&groupTimer);
-    for (int i = 0; i < groups.size(); ++i) {
+
+    for (int i = 0; i < (int) groups.size(); ++i) {
         storageGroups[groups[i]].emplace_back(&data->users[i]);
     }
-    timerPrintSecs("Groups", timerStopSecs(&groupTimer));
 
     Solution sol;
     vector<int> path;
@@ -44,14 +41,9 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
     User* prev;
     Storage* currentStorage;
 
-    timerStart(&costOpenTimer);
     for (int i = 0; i < (int) instance->openStorages.size(); ++i) {
         costOpenStorages += instance->openStorages[i]->cost;
     }
-    timerPrintSecs("Cost open", timerStopSecs(&costOpenTimer));
-
-    double sortTime = 0;
-    double whileTime = 0;
 
     // sort users by capacity, in each group
     for (int i = 0; i < (int) instance->openStorages.size(); ++i) {
@@ -61,15 +53,13 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
         prev = NULL;
         currentStorage = instance->openStorages[i];
         
-        timerStart(&sortTimer);
         sort(storageGroups[i].begin(), storageGroups[i].end(), cmpByDemand);
-        sortTime += timerStopSecs(&sortTimer);
+
         // for each storage, find hamiltonian paths and save them
         // strategy: take nodes in the order of appearance
 
         int storageCapacity = currentStorage->capacity;
 
-        timerStart(&wTimer);
         while (!storageGroups[i].empty()) {
             // next vehicle
             pathCost += data->vehicleCost;
@@ -116,11 +106,7 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
             capacity = data->vehicleCapacity;
         }
 
-        whileTime += timerStopSecs(&wTimer);
     }
-
-    timerPrintSecs("Sort", sortTime);
-    timerPrintSecs("While", whileTime);
 
     sol.cost += costOpenStorages;
     return sol;
@@ -133,11 +119,10 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
     vector<vector<User*> > storageGroups(instance->openStorages.size());
 
     const vector<int>& groups = instance->representation;
-    // timerStart(&groupTimer);
-    for (int i = 0; i < groups.size(); ++i) {
+
+    for (int i = 0; i < (int) groups.size(); ++i) {
         storageGroups[groups[i]].emplace_back(&data->users[i]);
     }
-    // timerPrintSecs("Groups", timerStopSecs(&groupTimer));
 
     Solution sol;
     vector<int> path;
@@ -146,10 +131,7 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
     // User* prev;
     // Storage* currentStorage;
 
-    // timerStart(&costOpenTimer);
-    // timerPrintSecs("Cost open", timerStopSecs(&costOpenTimer));
-
-    for (int i = 0; i < instance->openStorages.size(); ++i) {
+    for (int i = 0; i < (int) instance->openStorages.size(); ++i) {
 
         costOpenStorages += instance->openStorages[i]->cost;
 

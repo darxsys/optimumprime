@@ -1,3 +1,4 @@
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -8,19 +9,32 @@
 
 using namespace std;
 
+static struct option options[] = {
+    {"input", required_argument, 0, 'i'},
+    {"help", no_argument, 0, 'h'},
+    {0, 0, 0, 0}
+};
+
 // ***************************************************************************
 // PUBLIC
 
-extern void taskDataCreate(TaskData** taskData, char* inputPath);
+extern void taskDataCreate(TaskData** taskData, int argc, char* argv[]);
 
 extern void taskDataDelete(TaskData* taskData);
 
 extern void printSolution(const Solution* sol, char* outputFile);
 
+extern void printParams(TaskParams* taskParams);
+
 // ***************************************************************************
 
 // ***************************************************************************
 // PRIVATE
+
+static void parseArguments(char* inputPath, TaskParams** taskParams, int argc,
+    char* argv[]);
+
+static void help();
 
 static void parseFile(int* storageLen, vector<pair<int, int> >& storageCoordinates,
     vector<int>& storageCapacity, vector<int>& storageCost, int* userLen,
@@ -34,7 +48,12 @@ static void parseFile(int* storageLen, vector<pair<int, int> >& storageCoordinat
 // ***************************************************************************
 // PUBLIC
 
-extern void taskDataCreate(TaskData** taskData, char* inputPath) {
+extern void taskDataCreate(TaskData** taskData, int argc, char* argv[]) {
+
+    char* inputPath = NULL;
+    TaskParams* taskParams = NULL;
+
+    parseArguments(inputPath, &taskParams, argc, argv);
 
     int storageLen = 0;
     vector<pair<int, int> > storageCoordinates;
@@ -76,7 +95,9 @@ extern void taskDataCreate(TaskData** taskData, char* inputPath) {
     }
 
     *taskData = new TaskData(storageLen, storages, userLen, users,
-        vehicleCapacity, vehicleCost);
+        vehicleCapacity, vehicleCost, *taskParams);
+
+    delete taskParams;
 }
 
 extern void taskDataDelete(TaskData* taskData) {
@@ -102,10 +123,67 @@ extern void printSolution(const Solution* sol, char* outputFile) {
     fclose(out);
 }
 
+extern void printParams(TaskParams* taskParams) {
+    fprintf(stderr, "Parameters\n");
+    fprintf(stderr, "[Preproc] Genetic algorithm\n");
+    fprintf(stderr, "  population       %d\n", taskParams->gaPopulationLen);
+    fprintf(stderr, "  iterations       %d\n", taskParams->gaIterationsLen);
+    fprintf(stderr, "[Preproc] Greedy algorithm\n");
+    fprintf(stderr, "  population       %d\n", taskParams->grPopulationLen);
+    fprintf(stderr, "[Preproc] Simulated annealing\n");
+    fprintf(stderr, "  temperature     %lf\n", taskParams->saTemperature);
+    fprintf(stderr, "  min temperature %lf\n", taskParams->saMinTemperature);
+    fprintf(stderr, "  lambda          %lf\n", taskParams->saLambda);
+    fprintf(stderr, "  init solution    %d\n", taskParams->saInitSolution);
+    fprintf(stderr, "[Solver] Ant colony optimization\n");
+    fprintf(stderr, "  fi              %lf\n", taskParams->acoFi);
+    fprintf(stderr, "  alpha           %lf\n", taskParams->acoAlpha);
+    fprintf(stderr, "  beta            %lf\n", taskParams->acoBeta);
+    fprintf(stderr, "  q0              %lf\n", taskParams->acoQ0);
+    fprintf(stderr, "  population       %d\n", taskParams->acoPopulationLen);
+    fprintf(stderr, "  iterations       %d\n", taskParams->acoIterationsLen);
+}
+
 // ***************************************************************************
 
 // ***************************************************************************
 // PRIVATE
+
+static void parseArguments(char* inputPath, TaskParams** taskParams, int argc,
+    char* argv[]) {
+
+     while (1) {
+
+        char argument = getopt_long(argc, argv, "i:h", options, NULL);
+
+        if (argument == -1) {
+            break;
+        }
+
+        switch (argument) {
+        case 'i':
+            inputPath = optarg;
+            break;
+        default:
+            help();
+            exit(-1);
+        }
+    }
+
+    ASSERT(inputPath != NULL, "missing option -i");
+}
+
+static void help() {
+    printf(
+    "usage: optimumprime -i <input file> [arguments ...]\n"
+    "\n"
+    "arguments:\n"
+    "    -i, --input <file>\n"
+    "        (required)\n"
+    "        input file\n"
+    "    -h, -help\n"
+    "        prints out the help\n");
+}
 
 static void parseFile(int* storageLen, vector<pair<int, int> >& storageCoordinates,
     vector<int>& storageCapacity, vector<int>& storageCost, int* userLen,
@@ -117,13 +195,13 @@ static void parseFile(int* storageLen, vector<pair<int, int> >& storageCoordinat
     char* buffer = new char[BUFFER_SIZE];
     char* garbage = new char[BUFFER_SIZE];
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
     sscanf(buffer, "%d%s", userLen, garbage);
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
     sscanf(buffer, "%d%s", storageLen, garbage);
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
     userCoordinates.reserve(*userLen);
     userDemand.reserve(*userLen);
@@ -135,64 +213,64 @@ static void parseFile(int* storageLen, vector<pair<int, int> >& storageCoordinat
     for (int i = 0; i < *storageLen; ++i) {
         int x, y;
 
-        fgets(buffer, BUFFER_SIZE, inputFile);
+        garbage = fgets(buffer, BUFFER_SIZE, inputFile);
         sscanf(buffer, "%d\t%d%s", &x, &y, garbage);
 
         storageCoordinates.emplace_back(x, y);
     }
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
     for (int i = 0; i < *userLen; ++i) {
         int x, y;
 
-        fgets(buffer, BUFFER_SIZE, inputFile);
+        garbage = fgets(buffer, BUFFER_SIZE, inputFile);
         sscanf(buffer, "%d\t%d%s", &x, &y, garbage);
 
         userCoordinates.emplace_back(x, y);
     }
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
     sscanf(buffer, "%d%s", vehicleCapacity, garbage);
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
     for (int i = 0; i < *storageLen; ++i) {
         int capacity;
 
-        fgets(buffer, BUFFER_SIZE, inputFile);
+        garbage = fgets(buffer, BUFFER_SIZE, inputFile);
         sscanf(buffer, "%d%s", &capacity, garbage);
 
         storageCapacity.emplace_back(capacity);
     }
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
     for (int i = 0; i < *userLen; ++i) {
         int demand;
 
-        fgets(buffer, BUFFER_SIZE, inputFile);
+        garbage = fgets(buffer, BUFFER_SIZE, inputFile);
         sscanf(buffer, "%d%s", &demand, garbage);
 
         userDemand.emplace_back(demand);
     }
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
     for (int i = 0; i < *storageLen; ++i) {
         int cost;
 
-        fgets(buffer, BUFFER_SIZE, inputFile);
+        garbage = fgets(buffer, BUFFER_SIZE, inputFile);
         sscanf(buffer, "%d%s", &cost, garbage);
 
         storageCost.emplace_back(cost);
     }
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
 
-    fgets(buffer, BUFFER_SIZE, inputFile);
+    garbage = fgets(buffer, BUFFER_SIZE, inputFile);
     sscanf(buffer, "%d%s", vehicleCost, garbage);
 
     delete[] garbage;

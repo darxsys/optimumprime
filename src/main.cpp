@@ -8,12 +8,8 @@
 
 int main(int argc, char* argv[]) {
 
-    ASSERT(argc == 2, "missing input file");
-
-    char* inputPath = argv[1];
-
     TaskData* taskData;
-    taskDataCreate(&taskData, inputPath);
+    taskDataCreate(&taskData, argc, argv);
 
     srand(time(NULL));
 
@@ -47,7 +43,7 @@ int main(int argc, char* argv[]) {
 
         if (best.cost > sol.cost) {
             best = sol;
-            printf("BEST [Greedy] %d\n", best.cost);
+            printf("[BEST] Greedy %d\n", best.cost);
         } else {
             printf("Greedy: %d\n", sol.cost);
         }
@@ -56,7 +52,7 @@ int main(int argc, char* argv[]) {
 
         if (best.cost > sol2.cost) {
             best = sol2;
-            printf("BEST [AntColony] %d\n", best.cost);
+            printf("[BEST] AntColony %d\n", best.cost);
         } else {
             printf("AntColony %d\n", sol2.cost);
         }

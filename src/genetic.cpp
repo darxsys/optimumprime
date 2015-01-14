@@ -124,9 +124,9 @@ int closestStorage(User user,
     double minCost = INT_MAX;
     double cost;
 
-    int index;
+    int index = 0;
 
-    for (int i = 0; i < storages.size(); i++) {
+    for (int i = 0; i < (int) storages.size(); i++) {
         Storage storage = storages[i];
         cost = (storage.x - user.x) * (storage.x - user.x)/10.0 + (storage.y - user.y) * (storage.y - user.y)/10.0;
 
