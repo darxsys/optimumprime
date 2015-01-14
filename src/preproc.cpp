@@ -132,54 +132,81 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
 
     for (int i = 0; i < (int) storageSubsets.size(); ++i) {
 
-        vector<int> representation(taskData->userLen, -1);
-        vector<int> storageDemands((int) storageSubsets[i].size(), 0);
+        if (storageSubsets[i][0] != 0) continue;
+        if (storageSubsets[i][1] != 1) continue;
+        if (storageSubsets[i][2] != 4) continue;
 
-        for (int j = 0; j < (int) taskData->users.size(); ++j) {
+        vector<int> repBest(taskData->userLen, -1);
+        int costBest = 1000000000;
 
-            vector<tuple<int, int, int> > storages;
+        for (int k = 0; k < 50; ++k) {
 
-            for (int k = 0; k < (int) storageSubsets[i].size(); ++k) {
-                int storageIdx = storageSubsets[i][k];
-                storages.emplace_back(eucliedanDistances[j][storageIdx], storageIdx, k);
+            vector<pair<int, int> > users;
+
+            for (int j = 0; j < (int) taskData->users.size(); ++j) {
+                users.emplace_back(rand(), j);
             }
 
-            sort(storages.begin(), storages.end());
+            sort(users.begin(), users.end());
 
-            for (int k = 0; k < (int) storageSubsets[i].size(); ++k) {
-                int storageIdx = get<1>(storages[k]);
-                int idx = get<2>(storages[k]);
+            vector<int> representation(taskData->userLen, -1);
+            vector<int> storageDemands((int) storageSubsets[i].size(), 0);
 
-                if (storageDemands[idx] + taskData->users[j].demand >
-                    taskData->storages[storageIdx].capacity) {
-                    continue;
+            for (int j = 0; j < (int) taskData->users.size(); ++j) {
+
+                int userIdx = users[j].second;
+                vector<tuple<int, int, int> > storages;
+
+                for (int k = 0; k < (int) storageSubsets[i].size(); ++k) {
+                    int storageIdx = storageSubsets[i][k];
+                    storages.emplace_back(eucliedanDistances[userIdx][storageIdx],
+                        storageIdx, k);
                 }
 
-                storageDemands[idx] += taskData->users[j].demand;
-                representation[j] = idx;
-                break;
+                sort(storages.begin(), storages.end());
+
+                for (int k = 0; k < (int) storageSubsets[i].size(); ++k) {
+                    int storageIdx = get<1>(storages[k]);
+                    int idx = get<2>(storages[k]);
+
+                    if (storageDemands[idx] + taskData->users[userIdx].demand >
+                        taskData->storages[storageIdx].capacity) {
+                        continue;
+                    }
+
+                    storageDemands[idx] += taskData->users[userIdx].demand;
+                    representation[userIdx] = idx;
+                    break;
+                }
+
             }
 
-        }
+            int valid = 1;
 
-        int valid = 1;
+            for (int j = 0; j < taskData->userLen; ++j) {
+                if (representation[j] == -1) {
+                    valid = 0;
+                    break;
+                }
+            }
 
-        for (int j = 0; j < taskData->userLen; ++j) {
-            if (representation[j] == -1) {
-                valid = 0;
-                break;
+            if (valid) {
+                int costCurr = saRepCost(representation, storageSubsets[i], eucliedanDistances);
+
+                if (costCurr < costBest) {
+                    repBest = representation;
+                    costBest = costCurr;
+                }
             }
         }
 
-        if (valid) {
-            vector<Storage*> openStorages;
+        vector<Storage*> openStorages;
 
-            for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
-                openStorages.push_back(&taskData->storages[storageSubsets[i][j]]);
-            }
-
-            result.push_back(PreprocResult(openStorages, representation));
+        for (int j = 0; j < (int) storageSubsets[i].size(); ++j) {
+            openStorages.push_back(&taskData->storages[storageSubsets[i][j]]);
         }
+
+        result.push_back(PreprocResult(openStorages, repBest));
     }
 }
 

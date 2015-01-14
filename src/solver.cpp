@@ -236,9 +236,11 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
 
 Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
-    float fi = 0.25;
+    float fi = 0.3;
     float alpha = 1;
-    float beta = 1;
+    float beta = 2;
+    int numSteps = 1000;
+    float q0 = 0.1;
 
     vector<Storage*>& openStorages = instance->openStorages;
     vector<int>& representation = instance->representation;
@@ -304,9 +306,10 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
         Storage* storage = openStorages[i];
 
-        int numSteps = 0;
-        int antsLen = groups[i].size() * 2.5;
+        int step = 0;
         int groupLen = groups[i].size();
+
+        int antsLen = groupLen;
 
         if (groupLen == 0) {
             sol.cost += storage->cost;
@@ -316,7 +319,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         Solution best;
         best.cost = 1000000000;
 
-        while (numSteps < 5000) {
+        while (step < numSteps) {
 
             vector<tuple<vector<int>, int, Solution> > ants(antsLen);
 
@@ -345,14 +348,26 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
                     int curr = get<0>(ants[j]).back();
 
-                    for (set<int>::iterator it = s.begin(); it != s.end(); ++it) {
+                    float q = (float) rand() / (float) RAND_MAX;
+                    if (q < q0) {
+                        set<int>::iterator it = s.begin();
+                        advance(it, rand() % s.size());
 
-                        float p = pow(pheromons[i][curr][*it], alpha) *
-                            pow(1.0 / distances[i][curr][*it], beta);
-
-                        if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
-                            max = p;
+                        if (get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
                             next = *it;
+                        }
+                    }
+
+                    if (next == -1) {
+                        for (set<int>::iterator it = s.begin(); it != s.end(); ++it) {
+
+                            float p = pow(pheromons[i][curr][*it], alpha) *
+                                pow(1.0 / distances[i][curr][*it], beta);
+
+                            if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
+                                max = p;
+                                next = *it;
+                            }
                         }
                     }
 
@@ -410,7 +425,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                 best = *tempBest;
             }
 
-            ++numSteps;
+            ++step;
         }
 
         // merge cycles and costs

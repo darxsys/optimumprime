@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     std::vector<PreprocResult> preprocResults;
 
     // preprocGreedyStorage(preprocResults, taskData);
-    // preprocGreedyUser(preprocResults, taskData);
+    preprocGreedyUser(preprocResults, taskData);
     preprocGenetic(preprocResults, taskData);
     // preprocSimulatedAnnealing(preprocResults, taskData);
 
