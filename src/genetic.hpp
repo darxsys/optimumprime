@@ -7,4 +7,7 @@
 Chromosom geneticGroupClients(TaskData *taskData, int populationLen, int iteration,
         std::vector<Storage> storages);
 
+Chromosom localImprovement(Chromosom chromosom, TaskData *taskData,
+				std::vector<Storage> storages);
+
 #endif // GENETIC_HPP
