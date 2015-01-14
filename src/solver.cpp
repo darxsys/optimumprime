@@ -25,6 +25,11 @@ bool antByScore(const tuple<vector<int>, int, Solution>& la,
 
 Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
 
+    fprintf(stderr, "[Trivial] start\n");
+
+    Timeval timer;
+    timerStart(&timer);
+
     // creation of groups
     vector<vector<User*> > storageGroups(instance->openStorages.size());
 
@@ -109,10 +114,18 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
     }
 
     sol.cost += costOpenStorages;
+
+    timerPrintSes("[Trivial] end", timerStopSes(&timer));
+
     return sol;
 }
 
 Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
+
+    fprintf(stderr, "[Greedy] start\n");
+
+    Timeval timer;
+    timerStart(&timer);
 
     // creation of groups
     vector<vector<User*> > storageGroups(instance->openStorages.size());
@@ -209,10 +222,18 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
     }
 
     sol.cost += costOpenStorages;
+
+    timerPrintSes("[Greedy] end", timerStopSes(&timer));
+
     return sol;
 }
 
 Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
+
+    fprintf(stderr, "[AntColony] start\n");
+
+    Timeval timer;
+    timerStart(&timer);
 
     double fi = data->taskParams.acoFi;
     double alpha = data->taskParams.acoAlpha;
@@ -424,6 +445,8 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
         sol.cost += best.cost + storage->cost;
     }
+
+    timerPrintSes("[AntColony] end", timerStopSes(&timer));
 
     return sol;
 }

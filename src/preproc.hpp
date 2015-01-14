@@ -13,16 +13,19 @@ struct PreprocResult {
     }
 };
 
-extern void preprocGreedyStorage(std::vector<PreprocResult>& result,
-    TaskData* taskData);
+extern void preprocGreedyStorage(PreprocResult** result, TaskData* data,
+    std::vector<Storage*>& openStorages);
 
-extern void preprocGreedyUser(std::vector<PreprocResult>& result,
-    TaskData* taskData);
+extern void preprocGreedyUser(PreprocResult** result, TaskData* data,
+    std::vector<Storage*>& openStorages);
 
-extern void preprocGenetic(std::vector<PreprocResult>& result,
-    TaskData* taskData);
+extern void preprocGenetic(PreprocResult** result, TaskData* data,
+    std::vector<Storage*>& openStorages);
 
-extern void preprocSimulatedAnnealing(std::vector<PreprocResult>& result,
-    TaskData* taskData);
+extern void preprocSimulatedAnnealing(PreprocResult** result, TaskData* data,
+    std::vector<Storage*>& openStorages);
+
+extern void storageSubsetsCreate(std::vector<std::vector<Storage*> >& result,
+    std::vector<Storage>& storages, int minCapacity);
 
 #endif // PREPROC_HPP

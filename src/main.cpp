@@ -6,6 +6,8 @@
 #include "solver.hpp"
 #include "utils.hpp"
 
+static void printStorageGroup(std::vector<Storage*>& storages);
+
 int main(int argc, char* argv[]) {
 
     TaskData* taskData;
@@ -15,45 +17,98 @@ int main(int argc, char* argv[]) {
 
     srand(time(NULL));
 
-    std::vector<PreprocResult> preprocResults;
+    int userDemand = 0;
 
-    // preprocGreedyStorage(preprocResults, taskData);
-    preprocGreedyUser(preprocResults, taskData);
-    preprocGenetic(preprocResults, taskData);
-    // preprocSimulatedAnnealing(preprocResults, taskData);
+    for (int i = 0; i < taskData->userLen; ++i) {
+        userDemand += taskData->users[i].demand;
+    }
 
-    Solution best;
-    best.cost = 2000000000;
+    std::vector<std::vector<Storage*> > storageSubsets;
+    storageSubsetsCreate(storageSubsets, taskData->storages, userDemand);
 
-    for (int i = 0; i < (int) preprocResults.size(); ++i) {
-        printf("[%d] ", i);
-        for (int j = 0; j < (int) preprocResults[i].openStorages.size(); ++j) {
-            printf("%d ", preprocResults[i].openStorages[j]->id);
+    Solution solBest;
+    solBest.cost = 123456789;
+
+    for (int i = 0; i < (int) storageSubsets.size(); ++i) {
+        printStorageGroup(storageSubsets[i]);
+
+        PreprocResult* result = NULL;
+
+        preprocGreedyUser(&result, taskData, storageSubsets[i]);
+
+        if (result != NULL) {
+
+            Solution sol1 = solveGroupsGreedyOne(taskData, result);
+            Solution sol2 = solveGroupsAntColony(taskData, result);
+
+            if (sol1.cost < solBest.cost) {
+                solBest = sol1;
+                fprintf(stderr, "[BEST][GR][GR] %d\n", solBest.cost);
+            }
+
+            if (sol2.cost < solBest.cost) {
+                solBest = sol2;
+                fprintf(stderr, "[BEST][GR][ACO] %d\n", solBest.cost);
+            }
+
+            delete result;
+            result = NULL;
         }
-        printf("\n");
 
-        Solution sol = solveGroupsGreedyOne(taskData, &preprocResults[i]);
+        preprocGenetic(&result, taskData, storageSubsets[i]);
 
-        if (best.cost > sol.cost) {
-            best = sol;
-            printf("[BEST] Greedy %d\n", best.cost);
-        } else {
-            printf("Greedy: %d\n", sol.cost);
+        if (result != NULL) {
+
+            Solution sol1 = solveGroupsGreedyOne(taskData, result);
+            Solution sol2 = solveGroupsAntColony(taskData, result);
+
+            if (sol1.cost < solBest.cost) {
+                solBest = sol1;
+                fprintf(stderr, "[BEST][GA][GR] %d\n", solBest.cost);
+            }
+
+            if (sol2.cost < solBest.cost) {
+                solBest = sol2;
+                fprintf(stderr, "[BEST][GA][ACO] %d\n", solBest.cost);
+            }
+
+            delete result;
+            result = NULL;
         }
 
-        Solution sol2 = solveGroupsAntColony(taskData, &preprocResults[i]);
+        preprocSimulatedAnnealing(&result, taskData, storageSubsets[i]);
 
-        if (best.cost > sol2.cost) {
-            best = sol2;
-            printf("[BEST] AntColony %d\n", best.cost);
-        } else {
-            printf("AntColony %d\n", sol2.cost);
+        if (result != NULL) {
+
+            Solution sol1 = solveGroupsGreedyOne(taskData, result);
+            Solution sol2 = solveGroupsAntColony(taskData, result);
+
+            if (sol1.cost < solBest.cost) {
+                solBest = sol1;
+                fprintf(stderr, "[BEST][SA][GR] %d\n", solBest.cost);
+            }
+
+            if (sol2.cost < solBest.cost) {
+                solBest = sol2;
+                fprintf(stderr, "[BEST][SA][ACO] %d\n", solBest.cost);
+            }
+
+            delete result;
+            result = NULL;
         }
     }
 
-    printSolution(&best, "solution.txt");
+    printSolution(&solBest, "solution.txt");
 
     taskDataDelete(taskData);
 
     return 0;
+}
+
+static void printStorageGroup(std::vector<Storage*>& storages) {
+    fprintf(stderr, "\n[Group]");
+    for (int i = 0; i < (int) storages.size(); ++i) {
+        fprintf(stderr, " %d", storages[i]->id);
+    }
+    fprintf(stderr, "\n\n");
 }

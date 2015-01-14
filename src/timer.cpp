@@ -12,6 +12,10 @@ extern long long timerStop(Timeval* timer);
 
 extern void timerPrint(char message[], long long usec);
 
+extern double timerStopSes(Timeval* timer);
+
+extern void timerPrintSes(char message[], double sec);
+
 // ***************************************************************************
 
 // ***************************************************************************
@@ -37,7 +41,11 @@ extern long long timerStop(Timeval* timer) {
         1000000L + stop.tv_usec) - timer->tv_usec;
 }
 
-extern double timerStopSecs(Timeval* timer) {
+extern void timerPrint(char message[], long long usec) {
+    fprintf(stderr, "[%-25s]: %25lld us\n", message, usec);
+}
+
+extern double timerStopSes(Timeval* timer) {
 
     Timeval stop;
     gettimeofday(&stop, NULL);
@@ -46,12 +54,8 @@ extern double timerStopSecs(Timeval* timer) {
         1000000L + stop.tv_usec) - timer->tv_usec)) / 1000000;
 }
 
-extern void timerPrint(char message[], long long usec) {
-    fprintf(stderr, "[%-25s]: %25lld us\n", message, usec);
-}
-
-extern void timerPrintSecs(char message[], double sec) {
-    fprintf(stderr, "[%-15s]: %.6lf sec\n", message, sec);
+extern void timerPrintSes(char message[], double sec) {
+    fprintf(stderr, "%-25s %.6lf sec\n", message, sec);
 }
 
 // ***************************************************************************
