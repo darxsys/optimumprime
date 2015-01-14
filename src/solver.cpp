@@ -110,7 +110,6 @@ Solution solveGroupsTrivial(TaskData* data, PreprocResult* instance) {
 
     sol.cost += costOpenStorages;
     return sol;
-    // printSolution(sol, outputFile);
 }
 
 Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
@@ -127,9 +126,6 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
     Solution sol;
     vector<int> path;
     int costOpenStorages = 0;
-    // User* next;
-    // User* prev;
-    // Storage* currentStorage;
 
     for (int i = 0; i < (int) instance->openStorages.size(); ++i) {
 
@@ -218,11 +214,11 @@ Solution solveGroupsGreedyOne(TaskData* data, PreprocResult* instance) {
 
 Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
-    float fi = 0.3;
-    float alpha = 1;
-    float beta = 2;
-    int numSteps = 1000;
-    float q0 = 0.1;
+    double fi = data->taskParams.acoFi;
+    double alpha = data->taskParams.acoAlpha;
+    double beta = data->taskParams.acoBeta;
+    double q0 = data->taskParams.acoQ0;
+    int numSteps = data->taskParams.acoIterationsLen;
 
     vector<Storage*>& openStorages = instance->openStorages;
     vector<int>& representation = instance->representation;
@@ -235,7 +231,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
     // etas[i][j] = 1.0 / distances[i][j];
     vector<vector<vector<int> > > distances(openStorages.size());
-    vector<vector<vector<float> > > pheromons(openStorages.size());
+    vector<vector<vector<double> > > pheromons(openStorages.size());
 
     // init
     for (int i = 0; i < (int) openStorages.size(); ++i) {
@@ -244,7 +240,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
         if (groupLen == 1) continue;
 
-        float avgDistance = 0;
+        double avgDistance = 0;
         int edges = (groupLen * (groupLen - 1)) / 2;
 
         distances[i].resize(groupLen);
@@ -256,8 +252,8 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
             if (j == 0) continue;
 
-            float distance = euclideanDistance(*openStorages[i], *groups[i][j-1]);
-            avgDistance += distance;
+            int distance = euclideanDistance(*openStorages[i], *groups[i][j-1]);
+            avgDistance += (double) distance;
 
             distances[i][0][j] = distance;
             distances[i][j][0] = distances[i][0][j];
@@ -266,18 +262,18 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         for (int j = 1; j < groupLen; ++j) {
             for (int k = j + 1; k < groupLen; ++k) {
 
-                float distance = euclideanDistance(*groups[i][j-1], *groups[i][k-1]);
-                avgDistance += distance;
+                double distance = euclideanDistance(*groups[i][j-1], *groups[i][k-1]);
+                avgDistance += (double) distance;
 
                 distances[i][j][k] = distance;
                 distances[i][k][j] = distances[i][j][k];
             }
         }
 
-        avgDistance /= (float) edges;
+        avgDistance /= (double) edges;
 
         for (int j = 0; j < groupLen; ++j) {
-            pheromons[i][j].resize(groupLen, 1.0 / avgDistance);
+            pheromons[i][j].resize(groupLen, (double) 1 / avgDistance);
         }
     }
 
@@ -291,7 +287,8 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
         int step = 0;
         int groupLen = groups[i].size();
 
-        int antsLen = groupLen;
+        int antsLen = data->taskParams.acoPopulationLen != -1 ? 
+            data->taskParams.acoPopulationLen : groupLen;
 
         if (groupLen == 0) {
             sol.cost += storage->cost;
@@ -325,12 +322,13 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                 s.erase(start);
 
                 while (s.size() != 0) {
-                    float max = 0;
+                    double max = 0;
                     int next = -1;
 
                     int curr = get<0>(ants[j]).back();
 
-                    float q = (float) rand() / (float) RAND_MAX;
+                    double q = (double) rand() / (double) RAND_MAX;
+
                     if (q < q0) {
                         set<int>::iterator it = s.begin();
                         advance(it, rand() % s.size());
@@ -343,7 +341,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                     if (next == -1) {
                         for (set<int>::iterator it = s.begin(); it != s.end(); ++it) {
 
-                            float p = pow(pheromons[i][curr][*it], alpha) *
+                            double p = pow(pheromons[i][curr][*it], alpha) *
                                 pow(1.0 / distances[i][curr][*it], beta);
 
                             if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
@@ -395,7 +393,7 @@ Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
 
             // pheromone reinforcement
             Solution* tempBest = &(get<2>(ants.front()));
-            float delta = 1.0 / tempBest->cost;
+            double delta = (double) 1 / (double) tempBest->cost;
 
             for (int j = 0; j < (int) tempBest->cycles.size(); ++j) {
                 for (int k = 0; k < (int) tempBest->cycles[j].size() - 1; ++k) {

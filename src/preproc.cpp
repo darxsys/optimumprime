@@ -212,6 +212,9 @@ extern void preprocGreedyUser(vector<PreprocResult>& result, TaskData* taskData)
 
 extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData) {
 
+    int population = taskData->taskParams.gaPopulationLen;
+    int iterations = taskData->taskParams.gaIterationsLen;
+
     int userDemand = 0;
 
     for (int i = 0; i < taskData->userLen; ++i) {
@@ -233,7 +236,7 @@ extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData) {
             openStorages.push_back(taskData->storages[storageSubsets[i][j]]);
         }
 
-        Chromosom chromosom = geneticGroupClients(taskData, 50, 75000,
+        Chromosom chromosom = geneticGroupClients(taskData, population, iterations,
             openStorages);
 
         vector<Storage*> openStoragesPtrs;
@@ -247,6 +250,11 @@ extern void preprocGenetic(vector<PreprocResult>& result, TaskData* taskData) {
 }
 
 extern void preprocSimulatedAnnealing(vector<PreprocResult>& result, TaskData* taskData) {
+
+    double temperature = taskData->taskParams.saTemperature;
+    double tempMin = taskData->taskParams.saMinTemperature;
+    double lambda = taskData->taskParams.saLambda;
+    // int initSolution = taskData->taskParams.saInitSolution;
 
     int userDemand = 0;
 
@@ -299,11 +307,6 @@ extern void preprocSimulatedAnnealing(vector<PreprocResult>& result, TaskData* t
 
         vector<int> repBest(repCurr);
         int costBest = costCurr;
-
-        // t0, tf, lambda
-        double temperature = 550.0;
-        double tempMin = 0.01;
-        double lambda = 0.99;
 
         vector<int> capacitiesCurr(capacities);
 
