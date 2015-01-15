@@ -60,7 +60,7 @@ extern Solution postprocGreedy(Solution* solution, TaskData* data) {
 
         solutionCost(curr, data);
 
-        if (curr.cost == -1) continue;
+        if (curr.cost == -1) { continue; }
 
         if (curr.cost < best.cost) {
             best = curr;
@@ -82,6 +82,8 @@ static void solutionCost(Solution& sol, TaskData* data) {
     int cost = 0;
     set<int> storages;
 
+    vector<int> demands(data->storageLen, 0);
+
     for (int i = 0; i < sol.numPaths; ++i) {
 
         int demand = 0;
@@ -98,6 +100,8 @@ static void solutionCost(Solution& sol, TaskData* data) {
 
         storages.insert(sol.cycles[i][0]);
 
+        demands[sol.cycles[i][0]] += demand;
+
         cost += euclideanDistance(data->storages[sol.cycles[i][0]],
             data->users[sol.cycles[i][1]]);
 
@@ -111,6 +115,11 @@ static void solutionCost(Solution& sol, TaskData* data) {
     }
 
     for (set<int>::iterator it = storages.begin(); it != storages.end(); ++it) {
+        if (demands[*it] > data->storages[*it].capacity) {
+            sol.cost = -1;
+            return;
+        }
+
         cost += data->storages[*it].cost;
     }
 
