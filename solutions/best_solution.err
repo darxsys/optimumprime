@@ -1,0 +1,590 @@
+#####################################
+[Parameters]
+ [Grouping] Genetic algorithm
+  -population                     60
+  -iterations                  50000
+ [Grouping] Greedy algorithm
+  -population                    100
+ [Grouping] Simulated annealing
+  -temperature               200.000
+  -min temperature             0.010
+  -lambda                      0.990
+  -init solution                   1
+ [TSP] Ant colony optimization
+  -fi                          0.300
+  -alpha                       1.000
+  -beta                        3.000
+  -q0                          0.200
+  -population                     -1
+  -iterations                   5000
+#####################################
+
+[Group] 0 1 2
+
+[GreedyUser] start
+[GreedyUser] end          0.002576 sec
+[Greedy] start
+[Greedy] end              0.000061 sec
+[Greedy] start
+[Greedy] end              0.328799 sec
+[AntColony] start
+[AntColony] end           74.763184 sec
+[Greedy] start
+[Greedy] end              0.339960 sec
+[BEST][GR][GR][GR] 318356
+[BEST][GR][ACO][GR] 312673
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    9.180548 sec
+[Greedy] start
+[Greedy] end              0.000067 sec
+[Greedy] start
+[Greedy] end              0.350634 sec
+[AntColony] start
+[AntColony] end           80.104536 sec
+[Greedy] start
+[Greedy] end              0.362426 sec
+[BEST][GA][ACO][GR] 310058
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002771 sec
+[SimulatedAnnealing] end  0.003687 sec
+[Greedy] start
+[Greedy] end              0.000063 sec
+[Greedy] start
+[Greedy] end              0.374644 sec
+[AntColony] start
+[AntColony] end           69.628093 sec
+[Greedy] start
+[Greedy] end              0.351751 sec
+
+[Group] 0 1 3
+
+[GreedyUser] start
+[GreedyUser] end          0.002771 sec
+[Greedy] start
+[Greedy] end              0.000062 sec
+[Greedy] start
+[Greedy] end              0.368041 sec
+[AntColony] start
+[AntColony] end           70.889060 sec
+[Greedy] start
+[Greedy] end              0.357546 sec
+[BEST][GR][GR][GR] 300134
+[BEST][GR][ACO][GR] 292185
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    9.158293 sec
+[Greedy] start
+[Greedy] end              0.000064 sec
+[Greedy] start
+[Greedy] end              0.424710 sec
+[AntColony] start
+[AntColony] end           79.521793 sec
+[Greedy] start
+[Greedy] end              0.405896 sec
+[BEST][GA][ACO][GR] 291348
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002805 sec
+[SimulatedAnnealing] end  0.003691 sec
+[Greedy] start
+[Greedy] end              0.000062 sec
+[Greedy] start
+[Greedy] end              0.392243 sec
+[AntColony] start
+[AntColony] end           67.177814 sec
+[Greedy] start
+[Greedy] end              0.341444 sec
+
+[Group] 0 2 3
+
+[GreedyUser] start
+[GreedyUser] end          0.002603 sec
+[Greedy] start
+[Greedy] end              0.000060 sec
+[Greedy] start
+[Greedy] end              0.342212 sec
+[AntColony] start
+[AntColony] end           80.346509 sec
+[Greedy] start
+[Greedy] end              0.341187 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    11.755961 sec
+[Greedy] start
+[Greedy] end              0.000062 sec
+[Greedy] start
+[Greedy] end              0.375353 sec
+[AntColony] start
+[AntColony] end           71.007597 sec
+[Greedy] start
+[Greedy] end              0.458002 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.004822 sec
+[SimulatedAnnealing] end  0.006355 sec
+[Greedy] start
+[Greedy] end              0.000085 sec
+[Greedy] start
+[Greedy] end              0.463682 sec
+[AntColony] start
+[AntColony] end           79.356039 sec
+[Greedy] start
+[Greedy] end              0.341678 sec
+
+[Group] 1 2 3
+
+[GreedyUser] start
+[GreedyUser] end          0.002636 sec
+[Greedy] start
+[Greedy] end              0.000061 sec
+[Greedy] start
+[Greedy] end              0.353403 sec
+[AntColony] start
+[AntColony] end           73.088146 sec
+[Greedy] start
+[Greedy] end              0.346101 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.826714 sec
+[Greedy] start
+[Greedy] end              0.000060 sec
+[Greedy] start
+[Greedy] end              0.358673 sec
+[AntColony] start
+[AntColony] end           74.548136 sec
+[Greedy] start
+[Greedy] end              0.329109 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002654 sec
+[SimulatedAnnealing] end  0.003468 sec
+[Greedy] start
+[Greedy] end              0.000060 sec
+[Greedy] start
+[Greedy] end              0.343725 sec
+[AntColony] start
+[AntColony] end           74.363908 sec
+[Greedy] start
+[Greedy] end              0.471430 sec
+
+[Group] 0 1 2 3
+
+[GreedyUser] start
+[GreedyUser] end          0.005006 sec
+[Greedy] start
+[Greedy] end              0.000075 sec
+[Greedy] start
+[Greedy] end              0.487895 sec
+[AntColony] start
+[AntColony] end           72.957914 sec
+[Greedy] start
+[Greedy] end              0.384289 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.846228 sec
+[Greedy] start
+[Greedy] end              0.000064 sec
+[Greedy] start
+[Greedy] end              0.364773 sec
+[AntColony] start
+[AntColony] end           66.705033 sec
+[Greedy] start
+[Greedy] end              0.358467 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002766 sec
+[SimulatedAnnealing] end  0.003566 sec
+[Greedy] start
+[Greedy] end              0.000058 sec
+[Greedy] start
+[Greedy] end              0.362398 sec
+[AntColony] start
+[AntColony] end           66.109480 sec
+[Greedy] start
+[Greedy] end              0.339677 sec
+
+[Group] 0 1 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002647 sec
+[Greedy] start
+[Greedy] end              0.000056 sec
+[Greedy] start
+[Greedy] end              0.339268 sec
+[AntColony] start
+[AntColony] end           58.402476 sec
+[Greedy] start
+[Greedy] end              0.332844 sec
+[BEST][GR][GR][GR] 290658
+[BEST][GR][ACO][GR] 286497
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.221839 sec
+[Greedy] start
+[Greedy] end              0.000059 sec
+[Greedy] start
+[Greedy] end              0.332602 sec
+[AntColony] start
+[AntColony] end           56.960032 sec
+[Greedy] start
+[Greedy] end              0.337594 sec
+[BEST][GA][ACO][GR] 284472
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002685 sec
+[SimulatedAnnealing] end  0.003491 sec
+[Greedy] start
+[Greedy] end              0.000055 sec
+[Greedy] start
+[Greedy] end              0.345633 sec
+[AntColony] start
+[AntColony] end           55.063826 sec
+[Greedy] start
+[Greedy] end              0.302313 sec
+[BEST][SA][ACO][GR] 279055
+
+[Group] 0 2 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002607 sec
+[Greedy] start
+[Greedy] end              0.000056 sec
+[Greedy] start
+[Greedy] end              0.348245 sec
+[AntColony] start
+[AntColony] end           60.493969 sec
+[Greedy] start
+[Greedy] end              0.324145 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.807772 sec
+[Greedy] start
+[Greedy] end              0.000056 sec
+[Greedy] start
+[Greedy] end              0.341242 sec
+[AntColony] start
+[AntColony] end           61.547154 sec
+[Greedy] start
+[Greedy] end              0.342367 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002639 sec
+[SimulatedAnnealing] end  0.003441 sec
+[Greedy] start
+[Greedy] end              0.000055 sec
+[Greedy] start
+[Greedy] end              0.333865 sec
+[AntColony] start
+[AntColony] end           60.264177 sec
+[Greedy] start
+[Greedy] end              0.331776 sec
+
+[Group] 1 2 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002671 sec
+[Greedy] start
+[Greedy] end              0.000058 sec
+[Greedy] start
+[Greedy] end              0.340765 sec
+[AntColony] start
+[AntColony] end           63.654244 sec
+[Greedy] start
+[Greedy] end              0.351168 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.251370 sec
+[Greedy] start
+[Greedy] end              0.000057 sec
+[Greedy] start
+[Greedy] end              0.343581 sec
+[AntColony] start
+[AntColony] end           63.216342 sec
+[Greedy] start
+[Greedy] end              0.345308 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002674 sec
+[SimulatedAnnealing] end  0.003506 sec
+[Greedy] start
+[Greedy] end              0.000057 sec
+[Greedy] start
+[Greedy] end              0.346141 sec
+[AntColony] start
+[AntColony] end           62.984408 sec
+[Greedy] start
+[Greedy] end              0.349888 sec
+
+[Group] 0 1 2 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002750 sec
+[Greedy] start
+[Greedy] end              0.000053 sec
+[Greedy] start
+[Greedy] end              0.368899 sec
+[AntColony] start
+[AntColony] end           55.321444 sec
+[Greedy] start
+[Greedy] end              0.370874 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.249825 sec
+[Greedy] start
+[Greedy] end              0.000054 sec
+[Greedy] start
+[Greedy] end              0.369586 sec
+[AntColony] start
+[AntColony] end           55.972168 sec
+[Greedy] start
+[Greedy] end              0.333833 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002776 sec
+[SimulatedAnnealing] end  0.003579 sec
+[Greedy] start
+[Greedy] end              0.000055 sec
+[Greedy] start
+[Greedy] end              0.352423 sec
+[AntColony] start
+[AntColony] end           57.481129 sec
+[Greedy] start
+[Greedy] end              0.354588 sec
+
+[Group] 0 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002634 sec
+[Greedy] start
+[Greedy] end              0.000057 sec
+[Greedy] start
+[Greedy] end              0.328358 sec
+[AntColony] start
+[AntColony] end           73.899662 sec
+[Greedy] start
+[Greedy] end              0.342563 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    9.299114 sec
+[Greedy] start
+[Greedy] end              0.000059 sec
+[Greedy] start
+[Greedy] end              0.333077 sec
+[AntColony] start
+[AntColony] end           66.484668 sec
+[Greedy] start
+[Greedy] end              0.320018 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002657 sec
+[SimulatedAnnealing] end  0.003459 sec
+[Greedy] start
+[Greedy] end              0.000058 sec
+[Greedy] start
+[Greedy] end              0.353096 sec
+[AntColony] start
+[AntColony] end           67.118926 sec
+[Greedy] start
+[Greedy] end              0.338458 sec
+
+[Group] 1 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002671 sec
+[Greedy] start
+[Greedy] end              0.000052 sec
+[Greedy] start
+[Greedy] end              0.346845 sec
+[AntColony] start
+[AntColony] end           46.064413 sec
+[Greedy] start
+[Greedy] end              0.353901 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    7.992360 sec
+[Greedy] start
+[Greedy] end              0.000051 sec
+[Greedy] start
+[Greedy] end              0.347451 sec
+[AntColony] start
+[AntColony] end           45.957290 sec
+[Greedy] start
+[Greedy] end              0.341339 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002655 sec
+[SimulatedAnnealing] end  0.003444 sec
+[Greedy] start
+[Greedy] end              0.000053 sec
+[Greedy] start
+[Greedy] end              0.344263 sec
+[AntColony] start
+[AntColony] end           45.834595 sec
+[Greedy] start
+[Greedy] end              0.353727 sec
+
+[Group] 0 1 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002756 sec
+[Greedy] start
+[Greedy] end              0.000046 sec
+[Greedy] start
+[Greedy] end              0.376698 sec
+[AntColony] start
+[AntColony] end           34.668810 sec
+[Greedy] start
+[Greedy] end              0.325631 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.025665 sec
+[Greedy] start
+[Greedy] end              0.000046 sec
+[Greedy] start
+[Greedy] end              0.367205 sec
+[AntColony] start
+[AntColony] end           34.358640 sec
+[Greedy] start
+[Greedy] end              0.335464 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002803 sec
+[SimulatedAnnealing] end  0.003587 sec
+[Greedy] start
+[Greedy] end              0.000047 sec
+[Greedy] start
+[Greedy] end              0.371078 sec
+[AntColony] start
+[AntColony] end           35.003986 sec
+[Greedy] start
+[Greedy] end              0.343391 sec
+
+[Group] 2 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002627 sec
+[Greedy] start
+[Greedy] end              0.000058 sec
+[Greedy] start
+[Greedy] end              0.353695 sec
+[AntColony] start
+[AntColony] end           65.203765 sec
+[Greedy] start
+[Greedy] end              0.355180 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    9.571029 sec
+[Greedy] start
+[Greedy] end              0.000057 sec
+[Greedy] start
+[Greedy] end              0.325200 sec
+[AntColony] start
+[AntColony] end           65.208943 sec
+[Greedy] start
+[Greedy] end              0.330783 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002651 sec
+[SimulatedAnnealing] end  0.003443 sec
+[Greedy] start
+[Greedy] end              0.000058 sec
+[Greedy] start
+[Greedy] end              0.348225 sec
+[AntColony] start
+[AntColony] end           76.135613 sec
+[Greedy] start
+[Greedy] end              0.346203 sec
+
+[Group] 0 2 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.002727 sec
+[Greedy] start
+[Greedy] end              0.000057 sec
+[Greedy] start
+[Greedy] end              0.346149 sec
+[AntColony] start
+[AntColony] end           67.451373 sec
+[Greedy] start
+[Greedy] end              0.352992 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    9.281361 sec
+[Greedy] start
+[Greedy] end              0.000056 sec
+[Greedy] start
+[Greedy] end              0.356091 sec
+[AntColony] start
+[AntColony] end           64.870702 sec
+[Greedy] start
+[Greedy] end              0.431283 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.004046 sec
+[SimulatedAnnealing] end  0.005322 sec
+[Greedy] start
+[Greedy] end              0.000077 sec
+[Greedy] start
+[Greedy] end              0.410567 sec
+[AntColony] start
+[AntColony] end           74.599541 sec
+[Greedy] start
+[Greedy] end              0.417168 sec
+
+[Group] 1 2 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.004825 sec
+[Greedy] start
+[Greedy] end              0.000052 sec
+[Greedy] start
+[Greedy] end              0.453977 sec
+[AntColony] start
+[AntColony] end           40.420100 sec
+[Greedy] start
+[Greedy] end              0.344794 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.004871 sec
+[Greedy] start
+[Greedy] end              0.000049 sec
+[Greedy] start
+[Greedy] end              0.366242 sec
+[AntColony] start
+[AntColony] end           37.463062 sec
+[Greedy] start
+[Greedy] end              0.357673 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.002791 sec
+[SimulatedAnnealing] end  0.003577 sec
+[Greedy] start
+[Greedy] end              0.000049 sec
+[Greedy] start
+[Greedy] end              0.373179 sec
+[AntColony] start
+[AntColony] end           38.794019 sec
+[Greedy] start
+[Greedy] end              0.436687 sec
+
+[Group] 0 1 2 3 4
+
+[GreedyUser] start
+[GreedyUser] end          0.005668 sec
+[Greedy] start
+[Greedy] end              0.000067 sec
+[Greedy] start
+[Greedy] end              0.482928 sec
+[AntColony] start
+[AntColony] end           40.357661 sec
+[Greedy] start
+[Greedy] end              0.368871 sec
+[GeneticAlgorithm] start
+[GeneticAlgorithm] end    8.022092 sec
+[Greedy] start
+[Greedy] end              0.000047 sec
+[Greedy] start
+[Greedy] end              0.379166 sec
+[AntColony] start
+[AntColony] end           36.577426 sec
+[Greedy] start
+[Greedy] end              0.391929 sec
+[SimulatedAnnealing] start
+[GreedyUser] start
+[GreedyUser] end          0.003725 sec
+[SimulatedAnnealing] end  0.004568 sec
+[Greedy] start
+[Greedy] end              0.000050 sec
+[Greedy] start
+[Greedy] end              0.397777 sec
+[AntColony] start
+[AntColony] end           34.359798 sec
+[Greedy] start
+[Greedy] end              0.357388 sec

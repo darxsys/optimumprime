@@ -55,7 +55,7 @@ extern double timerStopSes(Timeval* timer) {
 }
 
 extern void timerPrintSes(char message[], double sec) {
-    fprintf(stderr, "%-25s %.6lf sec\n", message, sec);
+    fprintf(stderr, "%-25s %16.6lf sec\n", message, sec);
 }
 
 // ***************************************************************************
