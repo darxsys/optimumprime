@@ -372,6 +372,7 @@ extern Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                         // double max = 0;
 
                         vector<pair<double, int> > probs;
+                        double total = 0;
 
                         for (set<int>::iterator it = s.begin(); it != s.end(); ++it) {
 
@@ -379,11 +380,16 @@ extern Solution solveGroupsAntColony(TaskData* data, PreprocResult* instance) {
                                 pow(1.0 / distances[i][curr][*it], beta);
 
                             probs.emplace_back(-p, *it);
+                            total += p;
 
                             /*if (max <= p && get<1>(ants[j]) >= groups[i][*it - 1]->demand) {
                                 max = p;
                                 next = *it;
                             }*/
+                        }
+
+                        for (int k = 0; k < (int) probs.size(); ++k) {
+                            probs[k].first /= total;
                         }
 
                         sort(probs.begin(), probs.end());
